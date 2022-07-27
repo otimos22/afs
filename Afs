@@ -1860,7 +1860,7 @@ do
                         task.wait(WAIT_BEFORE_GETTING_ENEMIES)
                     end
 
-                    if towerTime.Text ~= "60:5" and player.World.Value == "Tower" then
+                    if towerTime.Text ~= "00:60" and player.World.Value == "Tower" then
                         local enemies = WS.Worlds.Tower.Enemies
                         local tab = enemies:GetChildren()
                         local floorNumber = tonumber(floorNumberText.Text)
@@ -1940,10 +1940,10 @@ do
                     if easyTrial and easyTrialTime.Text == "00:01" then
                         shouldStart = true
                         CURRENT_TRIAL = "Easy"
-                    elseif mediumTrial and mediumTrialTime.Text == "00:01" then
+                    elseif mediumTrial and mediumTrialTime.Text == "The Medium Time Trial starts in 60 seconds!" then
                         shouldStart = true
                         CURRENT_TRIAL = "Medium"
-                    elseif hardTrial and hardTrialTime.Text == "00:01" then
+                    elseif hardTrial and hardTrialTime.Text == "The Greater Time Trial starts in 60 seconds!" then
                         shouldStart = true
                         CURRENT_TRIAL = "Hard"
                                 shouldStart = true
