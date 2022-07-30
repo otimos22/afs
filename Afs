@@ -4,11 +4,11 @@ if game.PlaceId ~= ANIME_FIGHTERS_PLACE_ID then return end
 _G.disabled = false
 _G.themes = _G.themes or { -- themes
     Background = Color3.fromRGB(24, 24, 24),
-    Glow = Color3.fromRGB(60,  242, 60),
+    Glow = Color3.fromRGB(61, 231, 242),
     Accent = Color3.fromRGB(0, 0, 0),
     LightContrast = Color3.fromRGB(36, 36, 36),
     DarkContrast = Color3.fromRGB(14, 14, 14),
-    TextColor = Color3.fromRGB(0,255,0)
+    TextColor = Color3.fromRGB(61, 231, 242)
 }
 
 -- init
@@ -134,6 +134,7 @@ local ultimateTrialTime = WS.Worlds.Tower.Door4.Countdown.SurfaceGui.Background.
 local towerTime = PlayerGui.MainGui.TowerTimer.Main.Time
 local yesButton = PlayerGui.MainGui.RaidTransport.Main.Yes
 local floorNumberText = PlayerGui.MainGui.TowerTimer.CurrentFloor.Value
+local teleporttower = PlayerGui.MainGui.TeleportTower
 
 local function sendWebhookMessage()
     local req = (syn and syn.request) or http_request or request or (http and http.request) or nil
@@ -1687,7 +1688,7 @@ do
                             or target:FindFirstChild("Attackers") == nil
                             or table.find(enemyModels, target) == nil
                             or not autofarm1
-                            or table.find(IGNORED_TOWER, player.World.Value)
+                            or table.find(IGNORED_WORLDS, player.World.Value)
 
                             retreat()
                         end
@@ -1713,7 +1714,7 @@ do
         --farm all mob
         task.spawn(function()
             while not _G.disabled do
-                if farmAllMobs and not autofarm1 and not table.find(IGNORED_TOWER, player.World.Value) then
+                if farmAllMobs and not autofarm1 and not table.find(IGNORED_WORLDS, player.World.Value) then
                     local cWorld = player.World.Value
                     local enemySpawns = WS.Worlds[cWorld].EnemySpawners
                     local enemyModels = WS.Worlds[cWorld].Enemies:GetChildren()
@@ -1749,7 +1750,7 @@ do
                                 or target:FindFirstChild("Attackers") == nil
                                 or table.find(enemyModels, target) == nil
                                 or not farmAllMobs
-                                or table.find(IGNORED_TOWER, player.World.Value)
+                                or table.find(IGNORED_WORLDS, player.World.Value)
 
                                 retreat()
                             end
@@ -1860,7 +1861,7 @@ do
                         task.wait(WAIT_BEFORE_GETTING_ENEMIES)
                     end
 
-                    if towerTime.Text ~= "00:60" and player.World.Value == "Tower" then
+                    if towerTime.Text ~= "00:00" and player.World.Value == "Tower" then
                         local enemies = WS.Worlds.Tower.Enemies
                         local tab = enemies:GetChildren()
                         local floorNumber = tonumber(floorNumberText.Text)
@@ -1940,10 +1941,10 @@ do
                     if easyTrial and easyTrialTime.Text == "00:01" then
                         shouldStart = true
                         CURRENT_TRIAL = "Easy"
-                    elseif mediumTrial and mediumTrialTime.Text == "The Medium Time Trial starts in 60 seconds!" then
+                    elseif mediumTrial and mediumTrialTime.Text == "00:01" then
                         shouldStart = true
                         CURRENT_TRIAL = "Medium"
-                    elseif hardTrial and hardTrialTime.Text == "The Greater Time Trial starts in 60 seconds!" then
+                    elseif hardTrial and hardTrialTime.Text == "00:01" then
                         shouldStart = true
                         CURRENT_TRIAL = "Hard"
                                 shouldStart = true
