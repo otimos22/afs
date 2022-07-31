@@ -4,11 +4,11 @@ if game.PlaceId ~= ANIME_FIGHTERS_PLACE_ID then return end
 _G.disabled = false
 _G.themes = _G.themes or { -- themes
     Background = Color3.fromRGB(24, 24, 24),
-    Glow = Color3.fromRGB(61, 231, 242),
+    Glow = Color3.fromRGB(60,  242, 60),
     Accent = Color3.fromRGB(0, 0, 0),
     LightContrast = Color3.fromRGB(36, 36, 36),
     DarkContrast = Color3.fromRGB(14, 14, 14),
-    TextColor = Color3.fromRGB(61, 231, 242)
+    TextColor = Color3.fromRGB(0,255,0)
 }
 
 -- init
@@ -24,6 +24,8 @@ local VU = game:GetService("VirtualUser")
 local VIM = game:GetService("VirtualInputManager")
 local RunS = game:GetService("RunService")
 local TS = game:GetService("TweenService")
+local TowerFolder = workspace.Worlds: FindFirstChild ( "Tower" )
+
 
 local player = P.LocalPlayer
 local originalCameraZoomDistance = player.CameraMaxZoomDistance
@@ -1068,7 +1070,7 @@ do
         end)
     end
 
-    --seventh page: Calc Dmg OTIMOS?
+    --seventh page: Calc Dmg 
     do
         local page = GUI:addPage("Calc Dmg")
         local s1 = page:addSection("Select Fighter")
@@ -1687,7 +1689,7 @@ do
                             or target:FindFirstChild("Attackers") == nil
                             or table.find(enemyModels, target) == nil
                             or not autofarm1
-                            or table.find(IGNORED_WORLDS, player.World.Value)
+                            or table.find(IGNORED_TOWER, player.World.Value)
 
                             retreat()
                         end
@@ -1713,7 +1715,7 @@ do
         --farm all mob
         task.spawn(function()
             while not _G.disabled do
-                if farmAllMobs and not autofarm1 and not table.find(IGNORED_WORLDS, player.World.Value) then
+                if farmAllMobs and not autofarm1 and not table.find(IGNORED_TOWER, player.World.Value) then
                     local cWorld = player.World.Value
                     local enemySpawns = WS.Worlds[cWorld].EnemySpawners
                     local enemyModels = WS.Worlds[cWorld].Enemies:GetChildren()
@@ -1749,7 +1751,7 @@ do
                                 or target:FindFirstChild("Attackers") == nil
                                 or table.find(enemyModels, target) == nil
                                 or not farmAllMobs
-                                or table.find(IGNORED_WORLDS, player.World.Value)
+                                or table.find(IGNORED_TOWER, player.World.Value)
 
                                 retreat()
                             end
@@ -1936,55 +1938,8 @@ do
             while not _G.disabled do
                 if not table.find(IGNORED_WORLDS, player.World.Value) then
                     local shouldStart = false
-
-                    if easyTrial and easyTrialTime.Text == "00:01" then
-                        shouldStart = true
-                        CURRENT_TRIAL = "Easy"
-                    elseif mediumTrial and mediumTrialTime.Text == "00:01" then
-                        shouldStart = true
-                        CURRENT_TRIAL = "Medium"
-                    elseif hardTrial and hardTrialTime.Text == "00:01" then
-                        shouldStart = true
-                        CURRENT_TRIAL = "Hard"
-                                shouldStart = true
-                        CURRENT_TRIAL = "Ultimate"
-                    elseif ultimateTrial and ultimateTrialTime.Text == "00:01" then
-                        shouldStart = true
-                        CURRENT_TRIAL = "Ultimate"
-                    end
-
+             
                     if shouldStart then
-                        saveFarmAllState()
-                        REMOTE.AttemptTravel:InvokeServer("Tower")
-
-                        --Backup incase all pets get stuck on gold
-                        originalEquippedPets = getEquippedPets()
-                        table.clear(originalPetsTab)
-
-                        for _, pet in pairs(originalEquippedPets) do
-                            table.insert(originalPetsTab, pet.UID)
-                        end
-
-                        character.HumanoidRootPart.CFrame = WS.Worlds.Tower.Spawns.SpawnLocation.CFrame + Vector3.new(0,5,0)
-                        table.clear(sentDebounce) --in case you tp out of trial before the script does
-                    end
-                end
-
-                task.wait()
-            end
-
-            easyTrial = nil
-            mediumTrial = nil
-            hardTrial = nil
-            ultimateTrial = nil
-        end)
-        
-        task.spawn(function()
-            while not _G.disabled do
-                if not table.find(IGNORED_WORLDS, player.World.Value) then
-                    local shouldStart = false
-
-					if shouldStart then
                         saveFarmAllState()
                         REMOTE.AttemptTravel:InvokeServer("Tower")
 
