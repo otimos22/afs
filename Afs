@@ -134,7 +134,6 @@ local ultimateTrialTime = WS.Worlds.Tower.Door4.Countdown.SurfaceGui.Background.
 local towerTime = PlayerGui.MainGui.TowerTimer.Main.Time
 local yesButton = PlayerGui.MainGui.RaidTransport.Main.Yes
 local floorNumberText = PlayerGui.MainGui.TowerTimer.CurrentFloor.Value
-local teleporttower = PlayerGui.MainGui.TeleportTower
 
 local function sendWebhookMessage()
     local req = (syn and syn.request) or http_request or request or (http and http.request) or nil
@@ -1955,6 +1954,37 @@ do
                     end
 
                     if shouldStart then
+                        saveFarmAllState()
+                        REMOTE.AttemptTravel:InvokeServer("Tower")
+
+                        --Backup incase all pets get stuck on gold
+                        originalEquippedPets = getEquippedPets()
+                        table.clear(originalPetsTab)
+
+                        for _, pet in pairs(originalEquippedPets) do
+                            table.insert(originalPetsTab, pet.UID)
+                        end
+
+                        character.HumanoidRootPart.CFrame = WS.Worlds.Tower.Spawns.SpawnLocation.CFrame + Vector3.new(0,5,0)
+                        table.clear(sentDebounce) --in case you tp out of trial before the script does
+                    end
+                end
+
+                task.wait()
+            end
+
+            easyTrial = nil
+            mediumTrial = nil
+            hardTrial = nil
+            ultimateTrial = nil
+        end)
+        
+        task.spawn(function()
+            while not _G.disabled do
+                if not table.find(IGNORED_WORLDS, player.World.Value) then
+                    local shouldStart = false
+
+					if shouldStart then
                         saveFarmAllState()
                         REMOTE.AttemptTravel:InvokeServer("Tower")
 
